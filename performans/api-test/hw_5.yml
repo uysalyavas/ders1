@@ -1,0 +1,38 @@
+config:
+  target: "https://openlibrary.org"
+  phases:
+    - duration: 15
+      arrivalRate: 2
+      name: Open Library Load Test
+
+  payload:
+    path: "./hw_5.csv"
+    fields:
+      - "title"
+      - "author"
+
+  ensure:
+    - "http.response_time.p95 < 3000"
+    - "http.codes.200 >= 1"
+
+scenarios:
+  - name: Search and Post Book
+    flow:
+      - get:
+          url: "/search.json?q={{ title }}"
+          capture:
+            - json: "$.docs[0].key"
+              as: "bookKey"
+
+      - get:
+          url: "{{ bookKey }}.json"
+
+      - post:
+          url: "https://reqres.in/api/users"
+          json:
+            name: "{{ author }}"
+            book: "{{ title }}"
+          headers:
+            Content-Type: "application/json"
+
+      - log: "Sorgulanan kitap: {{ title }} | Yazar: {{ author }} | Key: {{ bookKey }}"

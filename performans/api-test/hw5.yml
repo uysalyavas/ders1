@@ -1,0 +1,31 @@
+config:
+  target: "https://reqres.in"
+  phases:
+    - duration: 20
+      arrivalRate: 4
+      name: ReqRes Load Test
+
+  payload:
+    path: "./hw5.csv"
+    fields:
+      - "name"
+      - "job"
+
+  ensure:
+    - http.response_time.p95 < 1000
+    - http.codes.200 == 1
+    - http.codes.201 >= 1   
+
+scenarios:
+  - name: ReqRes GET and POST Test
+    flow:
+      - get:
+          url: "/api/users?page=2"
+      - post:
+          url: "/api/users"
+          json:
+            name: "{{ name }}"
+            job: "{{ job }}"
+          headers:
+            Content-Type: "application/json"
+      - log: "Created user {{ name }} with job {{ job }}"

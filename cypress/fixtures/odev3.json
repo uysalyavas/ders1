@@ -1,0 +1,17 @@
+{
+  "url": "https://www.edu.goit.global/account/login",
+  "loginPage": {
+    "title": "Login",
+    "forgetPasswordText": "I can't remember the password"
+  },
+  "users": {
+    "user1": {
+      "email": "user888@gmail.com",
+      "password": "1234567890"
+    },
+    "user2": {
+      "email": "testowyqa@qa.team",
+      "password": "QA!automation-1"
+    }
+  }
+}
